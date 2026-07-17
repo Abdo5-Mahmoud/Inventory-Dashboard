@@ -1,0 +1,20 @@
+// import { useRouter } from "next/navigation";
+
+
+// export function usePagination({ pageNumber, limit }: { pageNumber: string, limit: string }) {
+//     const router = useRouter()
+
+//     // const pageNumber = Number(searchParams.get('page')) || 1
+//     // const limit = Number(searchParams.get('limit')) || 10
+
+//     const goToPage = (newPage: number) => {
+//         if (newPage < 1) return
+//         router.push(`?page=${newPage}&limit=${limit}`)
+//     }
+
+//     const changeLimit = (newLimit: number) => {
+//         router.push(`?page=1&limit=${newLimit}`)
+//     }
+//     return { changeLimit, goToPage, skip }
+
+// }

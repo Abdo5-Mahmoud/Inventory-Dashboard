@@ -1,0 +1,229 @@
+/* 
+
+"use client";
+
+import Link from "next/link";
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Button } from "./ui/button";
+
+type ContextType = {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  close: () => void;
+};
+
+const storeContext = createContext<ContextType | null>(null);
+
+export function useModel() {
+  const context = useContext(storeContext);
+  if (!context) throw new Error("useModel must be used within a Model");
+  return context;
+}
+
+// Parent Component
+function Model({
+  children,
+  className,
+  onCloseAction,
+  ...props
+}: React.ComponentProps<"div"> & {
+  onCloseAction?: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  function close() {
+    setIsOpen(false);
+    onCloseAction?.();
+  }
+  return (
+    <storeContext.Provider value={{ isOpen, setIsOpen, close }}>
+      <div className={`${className}`} {...props}>
+        {children}
+      </div>
+    </storeContext.Provider>
+  );
+}
+
+export function Trigger({
+  children,
+  variant,
+  className,
+  type,
+}: {
+  children: React.ReactElement;
+  variant?:
+    | "link"
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "destructive";
+  className?: string;
+  type?: "button" | "div";
+}) {
+  const { setIsOpen } = useModel();
+  return (
+    <>
+      {type === "button" && (
+        <Button
+          variant={variant}
+          className={className}
+          onClick={() => setIsOpen(true)}
+        >
+          {children}
+        </Button>
+      )}
+      {type === "div" && (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsOpen(true)}
+          className="flex-1"
+        >
+          {children}
+        </div>
+      )}
+    </>
+  );
+}
+
+export function Content({
+  children,
+  className,
+  contentHeight,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  contentHeight?: string;
+}) {
+  const { isOpen, setIsOpen } = useModel();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    
+    function handleClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      // console.log(target);
+      if (target.closest('[role="option"]')) return;
+      if (ref.current && !ref.current.contains(target)) {
+        setIsOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClick);
+    const keyboardEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", keyboardEsc);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", keyboardEsc);
+    };
+  }, [setIsOpen]);
+  return (
+    <div
+      className={`flex absolute inset-0 z-50 justify-center items-center w-full h-full bg-secondary/80 ${className} ${!isOpen && "hidden"}`}
+    >
+      <div
+        ref={ref}
+        aria-modal="true"
+        id="dialog"
+        role="dialog"
+        aria-labelledby="dialog"
+        className={`flex relative z-20 flex-col w-[80%] max-w-2xl  rounded-lg shadow-md md:h-2/3 bg-background ${contentHeight ? contentHeight : "h-1/2"}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function Header({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex sticky top-0 z-50 justify-center w-full rounded-t-lg bg-background">
+      <div className="py-5 px-2 w-[80%]  md:w-2/3 border-b md:p-4 lg:p-8 border-border">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function LinkButton({
+  href,
+  children,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const { setIsOpen } = useModel();
+  return (
+    <Link
+      href={href}
+      onClick={() => {
+        setIsOpen(false);
+      }}
+      className={className}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export function Body({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`overflow-y-auto flex-1 px-2 py-3 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+export function ModelButton({
+  content,
+  type,
+  className,
+  func,
+}: {
+  content: string;
+  type?: "button" | "submit" | "reset";
+  className?: string;
+  func?: () => void;
+}) {
+  const { setIsOpen } = useModel();
+
+  function handleClick() {
+    func?.();
+    setIsOpen(false);
+  }
+  return (
+    <Button type={type} onClick={handleClick} className={className}>
+      {content}
+    </Button>
+  );
+}
+
+Model.Trigger = Trigger;
+Model.Header = Header;
+Model.Content = Content;
+Model.Body = Body;
+Model.Button = ModelButton;
+Model.LinkButton = LinkButton;
+export default Model;
+
+*/
