@@ -41,34 +41,43 @@ export async function refreshAccessToken(
   const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      refreshToken: token,
+      expiresInMins: 30, // optional (FOR ACCESS TOKEN), defaults to 60
+    }),
   })
-    .then((res) => res.json())
-    .catch((res) => {
-      if (!res.ok) {
-        removeAuthCookie();
-        throw new Error("Refresh token required");
-      }
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      removeAuthCookie();
+      throw new Error("Refresh token required");
     });
   return res;
 }
 
-export async function getCurrentAuth(token: string): Promise<UserProfile> {
+export async function getCurrentAuth({
+  token,
+  refreshToken,
+}: {
+  token: string;
+  refreshToken: string;
+}): Promise<UserProfile | undefined> {
   try {
     const res = await getUserAuthProfile(token);
     if (res.message) {
-      const cookieStore = await cookies();
-      const refreshToken: string = cookieStore.get("refreshToken")?.value || "";
       const tokenData = await refreshAccessToken(refreshToken);
 
-      if (tokenData === undefined) {
+      if (!tokenData?.accessToken) {
         removeAuthCookie();
-        throw new Error("Refresh token required");
-      }
+        return;
+      } else {
+        setAuthCookie(tokenData);
 
-      return await getUserAuthProfile(tokenData.accessToken || "");
+        return await getUserAuthProfile(tokenData.accessToken);
+      }
     }
     return res;
   } catch (error) {

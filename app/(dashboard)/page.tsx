@@ -1,13 +1,7 @@
 import { DashboardMetricSkelton } from "@/components/DashboardMetricSkelton";
 import { MatricCards } from "@/components/MatricCards";
 import { Button } from "@/components/ui/button";
-import LoadingSpinner from "@/components/ui/loading-spinner";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { DashboardChart } from "@/features/dashboard/Components/DashboardChart.client";
 import { DashboardWidgets } from "@/features/dashboard/Components/DashboardWidgets";
 import { ArrowDownToLine, Calendar } from "lucide-react";
@@ -28,17 +22,28 @@ export default async function Home() {
             <Calendar className="size-5" />
             <span>Last 30 days</span>
           </Button>
-          {/* <Tooltip>
-            <TooltipTrigger asChild>
-              <span>
-                <Button className="flex text-white bg-primary" disabled>
-                  <ArrowDownToLine className="size-5" />
-                  <span>Export Report</span>
-                </Button>{" "}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>Available with backend integration</TooltipContent>
-          </Tooltip> */}
+          <span className="inline-block relative group">
+            <Button
+              className="flex text-white cursor-not-allowed bg-primary"
+              disabled
+            >
+              <ArrowDownToLine className="size-5" />
+              <span>Export Report</span>
+            </Button>
+
+            <span
+              className="
+      pointer-events-none absolute left-1/2 top-full z-10 mt-3
+      -translate-x-1/2 whitespace-nowrap rounded-md
+      bg-gray-900 px-3 py-1.5 text-xs text-white
+      opacity-0 transition-all duration-200
+      group-hover:translate-y-0 group-hover:opacity-100
+    "
+            >
+              Export feature is coming soon.
+              <span className="absolute -top-1 left-1/2 w-2 h-2 bg-gray-900 rotate-45 -translate-x-1/2" />
+            </span>
+          </span>
         </div>
       </SectionHeader>
 

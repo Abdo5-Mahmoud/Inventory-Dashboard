@@ -1,14 +1,4 @@
-import { SettingProps, User } from "./types";
-
-export const userData: User = {
-  id: "1",
-  name: "John Doe",
-  role: "Super admin",
-  email: "[EMAIL_ADDRESS]",
-  image: "https://example.com/john-doe.jpg",
-  bio: "Software Engineer",
-  location: "New York",
-};
+import { SettingProps } from "./types";
 
 export const SettingData: SettingProps = {
   storeName: "Example Store",

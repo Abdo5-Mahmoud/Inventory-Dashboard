@@ -48,9 +48,9 @@ export function CardComponent({
     >
       <div className="flex items-center px-4 w-full md:gap-0 md:p-0 md:flex-col">
         <Image
+          loading="lazy"
           {...(index > 3 && {
             fetchPriority: "high",
-            loading: "eager",
           })}
           src={product.thumbnail}
           alt={product.title}

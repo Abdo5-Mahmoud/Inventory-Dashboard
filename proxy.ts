@@ -6,17 +6,19 @@ export async function proxy(request: NextRequest) {
   const publicRoutes = ["/login"];
   const isPublicRoute = publicRoutes.includes(pathname);
   let token: string = request.cookies.get("accessToken")?.value || "";
-  let userData = await getCurrentAuth(token)
+  let refreshToken: string = request.cookies.get("refreshToken")?.value || "";
+  let userData = await getCurrentAuth({ token, refreshToken })
     .then((res) => res)
     .catch((err) => {
       NextResponse.redirect(new URL("/login", request.url));
       throw err;
     });
-  const isAuthenticated = Boolean(token && userData.id);
+  const isAuthenticated = Boolean(token && userData?.id);
 
   // checking if the token valid
 
   if (!isPublicRoute && !isAuthenticated) {
+    // console.log("token invalid or required");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

@@ -12,7 +12,9 @@ export async function setAuthCookie(data: LoginResponse) {
   const cookieStore = await cookies();
   cookieStore.set("accessToken", accessToken, COOKIE_OPTIONS);
   cookieStore.set("refreshToken", refreshToken, COOKIE_OPTIONS);
-  cookieStore.set("user", JSON.stringify(user), COOKIE_OPTIONS);
+  if (Object.keys(user).length) {
+    cookieStore.set("user", JSON.stringify(user), COOKIE_OPTIONS);
+  }
 }
 
 export async function getAuthCookie() {

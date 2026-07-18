@@ -1,9 +1,8 @@
+"use client";
 import { DashboardMetricCard } from "@/features/dashboard/Components/DashboardMetricCard";
-import { getAllCarts } from "@/features/orders/services/orders.service";
-import {
-  getCategoriesList,
-  getProducts,
-} from "@/features/products/services/products.service";
+import { useCategoryList } from "@/hooks/useCategoryList";
+import { useOrders } from "@/hooks/useOrders";
+import { useProducts } from "@/hooks/useProducts";
 import { getOrdersValue, getTotalInventoryValue } from "@/lib/productsHelpers";
 import {
   Box,
@@ -15,7 +14,7 @@ import {
   Van,
 } from "lucide-react";
 
-export async function MatricCards({
+export function MatricCards({
   totalProducts,
   InventoryValue,
   orders,
@@ -34,11 +33,11 @@ export async function MatricCards({
   avgOrderValue?: boolean;
   noOfProducts?: boolean;
 }) {
-  const [productsData, ordersData, categoriesList] = await Promise.all([
-    getProducts({}),
-    getAllCarts(),
-    getCategoriesList(),
-  ]);
+  const { data: ordersData } = useOrders();
+  const { data: productsData } = useProducts({
+    limit: 0,
+  });
+  const { data: categoriesList } = useCategoryList();
   const totalOrdersValue = getOrdersValue(ordersData?.carts ?? []);
   const totalInventoryValue = getTotalInventoryValue(
     productsData?.products ?? [],
@@ -52,7 +51,7 @@ export async function MatricCards({
         <DashboardMetricCard
           title="Total Products"
           icon1={SquareKanban}
-          value={`${productsData.total}`}
+          value={`${productsData?.total || 0}`}
           percentage="+12.%"
           colorVariant="success"
           icon2={MoveUpRight}
@@ -74,7 +73,7 @@ export async function MatricCards({
           icon2={MoveUpRight}
           percentage="8.2%"
           title="Orders"
-          value={`${ordersData.total}`}
+          value={`${ordersData?.total || 0}`}
           colorVariant="accent"
         />
       )}
@@ -102,7 +101,7 @@ export async function MatricCards({
           icon2={MoveUpRight}
           percentage="8.2%"
           title="Avg Order Value"
-          value={`$${(totalOrdersValue / ordersData.total).toFixed(2)}`}
+          value={`$${(totalOrdersValue / (ordersData?.total || 1)).toFixed(2)}`}
           colorVariant="accent"
         />
       )}
@@ -111,7 +110,7 @@ export async function MatricCards({
           icon1={Box}
           icon2={MoveUpRight}
           title="No of Products"
-          value={`${productsData.total}`}
+          value={`${productsData?.total}`}
           colorVariant="accent"
         />
       )}

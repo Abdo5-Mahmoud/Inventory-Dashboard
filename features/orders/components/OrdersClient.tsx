@@ -53,62 +53,13 @@ export function OrderClient() {
         (order.total - order.discountedTotal).toFixed(2),
     },
   ];
-  if (isLoading) return <LoadingSpinner ariaLabel="Getting Orders" />;
+  if (isLoading) return <LoadingSpinner />;
   // if (error) return toast.error("There Was an Error with getting Orders");
   return (
     <div className="w-full bg-secondary/40">
       {
         //  tabele Header
       }
-
-      {/* <div className="flex overflow-x-auto flex-col no-scrollbar">
-        <div className="grid grid-cols-[repeat(8,minmax(128px,1fr))] text-center ">
-          {columns.map((h) => {
-            const isSavings = h.key === "savings";
-            return (
-              <p
-                key={h.key}
-                className={`px-2 py-6  wrap-break-word whitespace-normal uppercase ${isSavings && "text-accent"} `}
-              >
-                {h.label}
-              </p>
-            );
-          })}
-        </div>
-
-        {
-          //tabele data
-        }
-        <div className="flex flex-col">
-          {data?.carts?.map((order: OrderType) => (
-            <div
-              key={order.id}
-              className="grid grid-cols-[repeat(8,minmax(128px,1fr))] text-center"
-            >
-              {columns.map((h) => {
-                const value = h.render(order);
-                const isId = h.key === "id";
-                const isUser = h.key === "userId";
-                const isSavings = h.key === "savings";
-                // If the value is an array (products), render its length
-                return (
-                  <p
-                    key={`${order.id}-${h.label}`}
-                    className={cn("px-2 py-6 whitespace-normal", {
-                      "text-accent": isId,
-                      "text-muted-foreground": isUser,
-                      "text-success": isSavings,
-                    })}
-                  >
-                    {value}
-                  </p>
-                );
-                // Otherwise, render the value directly
-              })}
-            </div>
-          ))}
-        </div>
-      </div> */}
 
       <div className="overflow-x-scroll no-scrollbar">
         <table className="w-full">
@@ -159,4 +110,55 @@ export function OrderClient() {
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="flex overflow-x-auto flex-col no-scrollbar">
+        <div className="grid grid-cols-[repeat(8,minmax(128px,1fr))] text-center ">
+          {columns.map((h) => {
+            const isSavings = h.key === "savings";
+            return (
+              <p
+                key={h.key}
+                className={`px-2 py-6  wrap-break-word whitespace-normal uppercase ${isSavings && "text-accent"} `}
+              >
+                {h.label}
+              </p>
+            );
+          })}
+        </div>
+
+        {
+          //tabele data
+        }
+        <div className="flex flex-col">
+          {data?.carts?.map((order: OrderType) => (
+            <div
+              key={order.id}
+              className="grid grid-cols-[repeat(8,minmax(128px,1fr))] text-center"
+            >
+              {columns.map((h) => {
+                const value = h.render(order);
+                const isId = h.key === "id";
+                const isUser = h.key === "userId";
+                const isSavings = h.key === "savings";
+                // If the value is an array (products), render its length
+                return (
+                  <p
+                    key={`${order.id}-${h.label}`}
+                    className={cn("px-2 py-6 whitespace-normal", {
+                      "text-accent": isId,
+                      "text-muted-foreground": isUser,
+                      "text-success": isSavings,
+                    })}
+                  >
+                    {value}
+                  </p>
+                );
+                // Otherwise, render the value directly
+              })}
+            </div>
+          ))}
+        </div>
+      </div> */
 }
