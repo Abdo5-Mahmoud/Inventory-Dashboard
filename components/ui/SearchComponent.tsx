@@ -34,9 +34,6 @@ export function SearchComponent({ className }: { className?: string }) {
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
-    router.replace(
-      `${pathname}?${createQueryString("search", debouncedValue)}`,
-    );
   }
   return (
     <div className={className}>
@@ -83,7 +80,9 @@ export function SearchComponent({ className }: { className?: string }) {
             <div className="grid grid-cols-1 gap-4 justify-center items-center px-4 w-full h-full lg:grid-cols-2">
               {isLoadingProductsSearch && <LoadingSpinner />}
               {searchedData?.products?.length === 0 ? (
-                <p>There is no prodcut with this name</p>
+                <p className="text-center">
+                  There is no prodcut with this name
+                </p>
               ) : (
                 searchedData?.products.map((product) => (
                   <Model.LinkButton

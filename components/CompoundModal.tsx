@@ -11,6 +11,7 @@ import React, {
   useState,
 } from "react";
 import { Button } from "./ui/button";
+import { X } from "lucide-react";
 
 type ContextType = {
   isOpen: boolean;
@@ -46,7 +47,7 @@ function Model({
   }
   return (
     <storeContext.Provider value={{ isOpen, open, close, setIsOpen }}>
-      <div className={`${className}`} {...props}>
+      <div className={`relative ${className && className}`} {...props}>
         {children}
       </div>
     </storeContext.Provider>
@@ -153,20 +154,25 @@ export function Content({
         fixed inset-0 z-50 m-auto
         flex flex-col w-[80%] max-w-2xl rounded-lg shadow-md bg-background
         focus-visible:outline-none
-        backdrop:bg-secondary/80 backdrop:backdrop-blur-sm
+        backdrop:bg-secondary/80 backdrop:backdrop-blur-sm 
         ${contentHeight ? contentHeight : "h-2/3"}
         ${className}
         ${!isOpen && "hidden"}
+        overflow-hidden
       `}
     >
-      <Button
-        onClick={close}
-        variant={"ghost"}
-        className="absolute top-4 right-4 z-50"
-      >
-        X
-      </Button>
-      {children}
+      <div className="flex relative flex-col h-full">
+        <button
+          type="button"
+          onClick={close}
+          className="absolute top-4 right-4 z-60"
+          aria-label="Close modal"
+        >
+          <X className="text-white size-5" />
+        </button>
+
+        {children}
+      </div>
     </dialog>
   );
 }
