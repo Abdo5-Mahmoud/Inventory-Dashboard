@@ -54,11 +54,11 @@ export default async function Home() {
           orders={true}
           ordersValue={true}
         />
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <DashboardChart />
+          <DashboardWidgets />
+        </div>
       </Suspense>
-      <div className="flex flex-col gap-6 lg:flex-row">
-        <DashboardChart />
-        <DashboardWidgets />
-      </div>
     </section>
   );
 }

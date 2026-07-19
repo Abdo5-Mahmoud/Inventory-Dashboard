@@ -21,5 +21,5 @@ export const productKeys = {
     skip: number;
     limit?: number;
     search: string;
-  }) => [...productKeys.all, "search", skip, limit, search],
+  }) => [...productKeys.all, skip, limit, search],
 };

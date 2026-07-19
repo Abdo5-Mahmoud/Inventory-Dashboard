@@ -10,7 +10,7 @@ import {
 import { useSearchList } from "@/hooks/useSearchList";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import Model from "../CompoundModal";
@@ -19,16 +19,9 @@ import LoadingSpinner from "./loading-spinner";
 export function SearchComponent({ className }: { className?: string }) {
   const [inputValue, setInputValue] = useState("");
   const debouncedValue = useDebounce({ value: inputValue, delay: 1000 });
-  const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const createQueryString = (name: string, value: string) => {
-    const current = new URLSearchParams(params.toString());
-    if (value) {
-      current.set(name, value);
-    }
-    return current.toString();
-  };
+
   const { data: searchedData, isLoading: isLoadingProductsSearch } =
     useSearchList(debouncedValue);
 

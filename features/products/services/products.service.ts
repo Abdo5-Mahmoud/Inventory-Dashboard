@@ -10,7 +10,7 @@ export async function getProducts({
   skip = 0,
   sortBy = "title",
   order = "asc",
-  category,
+  category = "",
 }: {
   limit?: number;
   skip?: number;

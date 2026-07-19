@@ -15,11 +15,11 @@ import {
 import { Suspense } from "react";
 
 export const metadata = { title: "Inventory" };
-
+const queryClient = new QueryClient();
 export default async function Products({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<{
+  params: Promise<{
     page: string;
     limit: string;
     sortBy: string;
@@ -27,32 +27,15 @@ export default async function Products({
     category: string;
   }>;
 }) {
-  const {
-    page: pageNumber = "1",
-    limit = "12",
-    sortBy,
-    order,
-    category,
-  } = await searchParams;
-  const skip = (Number(pageNumber) - 1) * Number(limit) || 0;
-
-  const queryClient = new QueryClient();
+  const { limit = "12" } = await params;
 
   await queryClient.prefetchQuery({
     queryKey: productKeys.productsList({
-      skip,
       limit: Number(limit),
-      sortBy: sortBy || "title",
-      order: order || "asc",
-      category: category || "",
     }),
     queryFn: () =>
       getProducts({
         limit: Number(limit),
-        skip: Number(skip),
-        sortBy: sortBy || "title",
-        order: order || "asc",
-        category: category || "",
       }),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -68,43 +51,40 @@ export default async function Products({
         "md:px-6",
       )}
     >
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className={cn("flex flex-col gap-6", "flex-1")}>
-          {/* Header Section */}
+      <div className={cn("flex flex-col gap-6", "flex-1")}>
+        {/* Header Section */}
 
-          <SectionHeader>
-            <div className="flex flex-col flex-1 gap-1">
-              <div className="flex justify-between">
-                <h1 className="text-3xl md:text-[32px] tracking-[-0,32] leading-10 font-semibold flex-1">
-                  Products
-                </h1>
-                <div className="flex flex-col flex-1 gap-2 items-center">
-                  <CreateProduct />
-                  <SearchComponent className="w-full" />
-                </div>
-              </div>
-              <div className="flex gap-2 items-center">
-                <p className="leading-6">
-                  Optimized for Enterprise Supply Chain
-                </p>
+        <SectionHeader>
+          <div className="flex flex-col flex-1 gap-1">
+            <div className="flex justify-between">
+              <h1 className="text-3xl md:text-[32px] tracking-[-0,32] leading-10 font-semibold flex-1">
+                Products
+              </h1>
+              <div className="flex flex-col flex-1 gap-2 items-center">
+                <CreateProduct />
+                <SearchComponent className="w-full" />
               </div>
             </div>
-          </SectionHeader>
+            <div className="flex gap-2 items-center">
+              <p className="leading-6">Optimized for Enterprise Supply Chain</p>
+            </div>
+          </div>
+        </SectionHeader>
 
-          {/* metrics cards */}
-
-          <MatricCards
-            totalProducts={true}
-            InventoryValue={true}
-            showCategories={true}
-          />
+        {/* metrics cards */}
+        <MatricCards
+          totalProducts={true}
+          InventoryValue={true}
+          showCategories={true}
+        />
+        <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense
             fallback={<ProductsLoadingSkeleton limit={Number(limit)} />}
           >
-            <ProductsClient skip={skip} />
+            <ProductsClient />
           </Suspense>
-        </div>
-      </HydrationBoundary>
+        </HydrationBoundary>
+      </div>
     </section>
   );
 }

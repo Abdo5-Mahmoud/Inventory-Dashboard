@@ -15,6 +15,7 @@ import { DashboardCardContainer } from "./CardContainer";
 import { SelectModel } from "@/components/SelectModel";
 import { ErrorState } from "@/components/ui/error-state";
 import { WidgetLoadingSkeleton } from "./WidgetLoadingSkeleton";
+import Image from "next/image";
 
 export function DashboardWidgets() {
   const [widgetType, setWidgetType] = useState("topSellingProducts");
@@ -76,7 +77,7 @@ export function DashboardWidgets() {
       <SelectModel
         func={(val) => setWidgetType(val)}
         label="Select Widget"
-        className="absolute top-2 right-1 md:top-7  "
+        className="absolute right-1 top-2 md:top-7"
         items={[
           {
             text: "Top Selling Products",
@@ -92,10 +93,11 @@ export function DashboardWidgets() {
         {widgetData.data.map((product) => (
           <Link href={`/products/${product.id}`} key={product.id}>
             <div className="flex gap-4 justify-between items-center p-4 w-full">
-              <img
+              <Image
                 src={product.thumbnail}
                 alt={product.title}
-                className="size-14"
+                width={56}
+                height={56}
               />
               <div className="flex flex-col flex-1 justify-center">
                 <p className="leading-6 text-wrap">{product.title}</p>

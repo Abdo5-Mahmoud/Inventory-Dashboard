@@ -1,28 +1,13 @@
 import { createQueryString } from "@/lib/url-helpers";
 import Link from "next/link";
-import path from "path";
 
 type PaginationUiProps = {
-  pageNumber: string;
-  paramsFilter: {
-    limit: number;
-    category: string;
-    sortBy: string;
-    order: string;
-    page: number;
-    params: URLSearchParams;
-    skip: number;
-  };
+  paramsFilter: URLSearchParams;
   totalPages: number;
 };
 
-export function PaginationUi({
-  pageNumber,
-  paramsFilter,
-  totalPages,
-}: PaginationUiProps) {
-  const { limit, category, sortBy, order, page, params, skip } = paramsFilter;
-  const currentPage = Number(pageNumber);
+export function PaginationUi({ paramsFilter, totalPages }: PaginationUiProps) {
+  const currentPage = Number(paramsFilter.get("page")) || 1;
   const prevPage = currentPage > 1 ? currentPage - 1 : null;
   const nextPage = currentPage < totalPages ? currentPage + 1 : null;
 
@@ -30,7 +15,7 @@ export function PaginationUi({
     <div className="flex gap-3 justify-center items-center py-8">
       {prevPage ? (
         <Link
-          href={`${createQueryString({ path: "/inventory", limit: limit, category: category, sortBy: sortBy, order: order, page: prevPage, params: params })}`}
+          href={`${createQueryString({ path: "/inventory", page: prevPage, params: paramsFilter })}`}
           className="px-4 py-2 text-sm font-medium rounded-lg border transition-colors hover:bg-muted"
         >
           ← Previous{" "}
@@ -47,7 +32,7 @@ export function PaginationUi({
 
       {nextPage ? (
         <Link
-          href={`${createQueryString({ path: "/inventory", limit: limit, category: category, sortBy: sortBy, order: order, page: nextPage, params: params })}`}
+          href={`${createQueryString({ path: "/inventory", page: nextPage, params: paramsFilter })}`}
           className="px-4 py-2 text-sm font-medium rounded-lg border transition-colors hover:bg-muted"
         >
           Next →

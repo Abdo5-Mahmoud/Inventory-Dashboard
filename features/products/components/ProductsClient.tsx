@@ -9,7 +9,7 @@ import { createQueryString, getFilters } from "@/lib/url-helpers";
 import { cn } from "@/lib/utils";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useProducts } from "../../../hooks/useProducts";
 import { CardComponent } from "./CardComponent";
 import { FilterCategoriesModel } from "./FilterCategoriesModel";
@@ -22,60 +22,45 @@ const PAGE_LIMIT_OPTIONS = [
   { value: "48", text: "48" },
   { value: "96", text: "96" },
 ];
-export default function ProductsClient({ skip }: { skip: number }) {
+export default function ProductsClient() {
   const path = usePathname();
   const router = useRouter();
   const params = useSearchParams();
-  const paramsFilter = getFilters({ params });
-  const { limit, category, sortBy, order } = paramsFilter;
+  const { limit, category, sortBy, order, page } = getFilters({ params });
+
+  const skip = (page - 1) * limit;
   const {
     isPending: productsPending,
-    data,
+    data: productsData,
     error: productsError,
     isFetching: productsIsFetching,
   } = useProducts({
     limit: Number(limit),
-    skip,
     sortBy,
+    skip,
     order,
     category,
   });
   const { data: categories, isPending: categoryPending } = useCategoryList();
 
   // Prepare categories for SelectModel
-  const CategoriesData = getCategoriesListData(categories ?? []);
+  const CategoriesData = useMemo(
+    () => getCategoriesListData(categories ?? []),
+    [categories],
+  );
 
   // Extract products from data
-  const products = data?.products ?? [];
+  const products = useMemo(() => productsData?.products ?? [], [productsData]);
 
   // Calculate total inventory value
   // const totalInventoryValue = getTotalInventoryValue(products);
 
   // Calculate total pages for pagination
-  const totalPages = Math.ceil((data?.total ?? 0) / Number(limit));
+  const totalPages = Math.ceil((productsData?.total ?? 0) / Number(limit));
   // Calculate current page number
-  const pageNumber = (skip / Number(limit) + 1 || 1).toString();
 
   // filter by category function
-  const filterByCategory = useCallback(
-    (category: string) => {
-      category == "all"
-        ? router.push(
-            `${createQueryString({ category: "", params, path, limit })}`,
-          )
-        : router.push(
-            `${createQueryString({ category, params, path, limit })}`,
-          );
-    },
-    [params, path, router],
-  );
-  const sortProducts = useCallback(
-    (sortBy: string) => {
-      if (category) return;
-      router.push(`${createQueryString({ sortBy, params, path, limit })}`);
-    },
-    [category, params, path, router],
-  );
+
   const orderProducts = useCallback(
     (order: string) => {
       if (category) return;
@@ -102,37 +87,36 @@ export default function ProductsClient({ skip }: { skip: number }) {
               <p className="font-medium text-foreground">Filter By Category:</p>
               <FilterCategoriesModel
                 categoryItems={CategoriesData}
-                func={filterByCategory}
                 active={category}
               />
             </div>
             {totalPages > 1 && (
-              <SortModel
-                sortFunction={sortProducts}
-                activeValue={sortBy}
-                icon={
-                  order == "desc" ? (
-                    <button onClick={() => orderProducts("asc")}>
-                      <ArrowUpIcon className="size-5" />
-                    </button>
-                  ) : (
-                    <button onClick={() => orderProducts("desc")}>
-                      <ArrowDownIcon className="size-5" />
-                    </button>
-                  )
-                }
-              />
-            )}
-            {totalPages > 1 && (
-              <SelectModel
-                label="Per Page :"
-                items={PAGE_LIMIT_OPTIONS}
-                func={(value) => {
-                  router.push(
-                    `${createQueryString({ limit: Number(value), params, path })}`,
-                  );
-                }}
-              />
+              <>
+                <SortModel
+                  activeValue={sortBy}
+                  icon={
+                    order == "desc" ? (
+                      <button onClick={() => orderProducts("asc")}>
+                        <ArrowUpIcon className="size-5" />
+                      </button>
+                    ) : (
+                      <button onClick={() => orderProducts("desc")}>
+                        <ArrowDownIcon className="size-5" />
+                      </button>
+                    )
+                  }
+                />
+
+                <SelectModel
+                  label="Per Page :"
+                  items={PAGE_LIMIT_OPTIONS}
+                  func={(value) => {
+                    router.push(
+                      `${createQueryString({ limit: Number(value), params, path })}`,
+                    );
+                  }}
+                />
+              </>
             )}
           </div>
         </div>
@@ -162,11 +146,7 @@ export default function ProductsClient({ skip }: { skip: number }) {
           )}
         </div>
         <div className="flex justify-center py-8">
-          <PaginationUi
-            pageNumber={pageNumber}
-            paramsFilter={paramsFilter}
-            totalPages={totalPages}
-          />
+          <PaginationUi totalPages={totalPages} paramsFilter={params} />
         </div>
       </div>
     </>
