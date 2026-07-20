@@ -7,7 +7,20 @@ import { ProductTabs } from "@/features/inventory/components/ProductTabs";
 import { EditProduct } from "@/features/inventory/components/UpdateProduct";
 import { getProductById } from "@/features/inventory/services/product.service";
 import { Archive, Banknote, Star } from "lucide-react";
+import { Metadata } from "next";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductById({ id });
 
+  return {
+    title: product.title,
+    description: product.description,
+  };
+}
 export default async function ProductPage({
   params,
 }: {

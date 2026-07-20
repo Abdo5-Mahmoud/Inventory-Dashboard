@@ -1,6 +1,11 @@
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { LayoutDashboard } from "lucide-react";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Sign in to access your inventory dashboard.",
+};
 export default function Login() {
   return (
     <div className="flex flex-col gap-6 p-4 w-full rounded-xl max-w-110 bg-input-background">

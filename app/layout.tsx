@@ -10,8 +10,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Global Store Dashboard",
-  description: "Global Store",
+  title: {
+    default: "DashCommerce",
+    template: "%s | DashCommerce",
+  },
+  description:
+    "Monitor business metrics, orders, revenue and inventory in one place.",
 };
 
 export default function RootLayout({

@@ -12,9 +12,14 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
-export const metadata = { title: "Inventory" };
+export const metadata: Metadata = {
+  title: "Inventory",
+  description: "Manage products, stock levels, pricing and categories.",
+};
+
 const queryClient = new QueryClient();
 export default async function Products({
   params,

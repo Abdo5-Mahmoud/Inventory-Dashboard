@@ -5,7 +5,11 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DashboardChart } from "@/features/dashboard/Components/DashboardChart.client";
 import { DashboardWidgets } from "@/features/dashboard/Components/DashboardWidgets";
 import { ArrowDownToLine, Calendar } from "lucide-react";
+import { Metadata } from "next";
 import { Suspense } from "react";
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export default async function Home() {
   return (
@@ -54,11 +58,11 @@ export default async function Home() {
           orders={true}
           ordersValue={true}
         />
-        <div className="flex flex-col gap-6 lg:flex-row">
-          <DashboardChart />
-          <DashboardWidgets />
-        </div>
       </Suspense>
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <DashboardChart />
+        <DashboardWidgets />
+      </div>
     </section>
   );
 }

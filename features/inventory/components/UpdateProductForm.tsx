@@ -17,13 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SquarePen } from "lucide-react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ProductForm, productFormSchema } from "../schemas";
-export function UpdateProductForm({
-  product,
-  onSuccess,
-}: {
-  product: ProductType;
-  onSuccess: () => void;
-}) {
+import { useModel } from "@/components/CompoundModal";
+export function UpdateProductForm({ product }: { product: ProductType }) {
   const {
     register,
     handleSubmit,
@@ -42,6 +37,8 @@ export function UpdateProductForm({
       discountPercentage: product.discountPercentage,
     },
   });
+  const { close } = useModel();
+
   const { data: categoryList } = useCategoryList();
   const categories = getCategoriesListData(categoryList ?? []);
   const { mutate } = useUpdateProductMutation();
@@ -49,7 +46,7 @@ export function UpdateProductForm({
   const onSubmit: SubmitHandler<ProductForm> = async (data) => {
     mutate(
       { id: product.id, product: { ...data } },
-      { onSuccess: () => onSuccess() },
+      { onSuccess: () => close() },
     );
   };
 

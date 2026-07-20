@@ -5,7 +5,6 @@ import { ProductType } from "@/features/products/types/product.type";
 import { UpdateProductForm } from "./UpdateProductForm";
 
 export function EditProduct({ product }: { product: ProductType }) {
-  const { close } = useModel();
   return (
     <div className="flex-1">
       <Model className="overflow-hidden min-h-0">
@@ -14,7 +13,7 @@ export function EditProduct({ product }: { product: ProductType }) {
         </Model.Trigger>
         <Model.Content contentHeight="h-[80%]">
           <Model.Body className="">
-            <UpdateProductForm product={product} onSuccess={close} />
+            <UpdateProductForm product={product} />
           </Model.Body>
         </Model.Content>
       </Model>

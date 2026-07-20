@@ -1,7 +1,11 @@
 import { MatricCards } from "@/components/MatricCards";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { OrderClient } from "@/features/orders/components/OrdersClient";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Orders",
+  description: "Track customer orders and sales activity.",
+};
 export default function page() {
   return (
     <section className="flex flex-1 overflow-x-hidden flex-col gap-8 px-6 py-8">

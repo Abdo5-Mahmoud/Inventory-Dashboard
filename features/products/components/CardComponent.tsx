@@ -59,7 +59,7 @@ export function CardComponent({
           sizes="(max-width: 768px) 100px, 200px"
           className={cn("", "rounded-lg", "w-48 h-48", "object-cover")}
         />
-        <div className="flex flex-col justify-between px-4 max-w-full lg:pt-6 md:mt-1 md:gap-1">
+        <div className="flex flex-col justify-between px-4  w-full lg:pt-6 md:mt-1 md:gap-1">
           <div className={cn("flex", "justify-between", "items-center")}>
             <h4
               className={cn(
@@ -110,7 +110,7 @@ export function CardComponent({
         </div>
       </div>
       <div className="w-full">
-        <Button variant="secondary" className="..." asChild>
+        <Button variant="secondary" className="w-full" asChild>
           <Link href={`/inventory/${product.id}`}>
             <Pencil aria-hidden={true} />
             Show Product

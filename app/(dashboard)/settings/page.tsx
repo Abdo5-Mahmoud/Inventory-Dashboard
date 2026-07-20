@@ -1,7 +1,12 @@
 import { MatricCards } from "@/components/MatricCards";
 import { SettingsForm } from "@/features/settings/components/SettingsForm";
 import { SettingsCardContainer } from "@/features/settings/components/SettingsCardContainer";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Settings",
+  description:
+    "Manage enterprise settings, preferences, and security configurations.",
+};
 export default function page() {
   return (
     <section className="p-6">
