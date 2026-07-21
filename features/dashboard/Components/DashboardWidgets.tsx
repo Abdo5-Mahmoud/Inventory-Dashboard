@@ -91,7 +91,7 @@ export function DashboardWidgets() {
       />
       <div className="flex flex-col gap-6 rounded-sm">
         {widgetData.data.map((product) => (
-          <Link href={`/products/${product.id}`} key={product.id}>
+          <Link href={`/inventory/${product.id}`} key={product.id}>
             <div className="flex gap-4 justify-between items-center p-4 w-full">
               <Image
                 src={product.thumbnail}

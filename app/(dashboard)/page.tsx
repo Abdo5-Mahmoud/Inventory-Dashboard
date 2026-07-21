@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   return (
-    <section className="flex overflow-auto flex-col gap-8 px-6 pt-8 pb-8 w-full">
+    <section className="flex overflow-x-hidden flex-col gap-8 px-6 pt-8 pb-8 w-full">
       <SectionHeader>
         <div className="flex flex-col gap-1">
           <h2 className="text-3xl md:text-[32px] tracking-[-0,32] leading-10 font-semibold">

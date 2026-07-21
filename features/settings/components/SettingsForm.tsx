@@ -1,7 +1,7 @@
 "use client";
 import { FormInput } from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
-import { SettingData } from "@/data/data";
+import { SettingData } from "@/features/settings/data/data";
 import { useState } from "react";
 
 export function SettingsForm() {

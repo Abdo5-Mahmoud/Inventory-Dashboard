@@ -12,7 +12,12 @@ export default function DashboardLayout({
 }>) {
   return (
     <div
-      className={cn("flex flex-col-reverse md:flex-row", "min-h-0", "flex-1")}
+      className={cn(
+        "flex flex-col-reverse md:flex-row",
+        "min-h-0",
+        "flex-1",
+        "overflow-hidden",
+      )}
     >
       <Sidebar />
       <div className={cn("flex-1", "flex", "flex-col", "min-h-0", "relative")}>
